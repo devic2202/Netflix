@@ -1,20 +1,30 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import prismadb from '@/lib/prismadb'
-import {compare} from 'bcrypt'
-
+import { compare } from 'bcrypt'
+import GithubProvider from 'next-auth/providers/github'
+import GoogleProvider from 'next-auth/providers/google'
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 export default NextAuth({
   providers: [
+    GithubProvider({
+      clientId: process.env.GITHUB_ID || '',
+      clientSecret: process.env.GITHUB_SECRET || '',
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+    }),
     Credentials({
       id: 'credentials',
-      name: 'credentials',
+      name: 'Credentials',
       credentials: {
         email: {
           label: 'Email',
           type: 'text',
         },
         password: {
-          label: 'pasword',
+          label: 'Password',
           type: 'password',
         }
       },
@@ -27,12 +37,12 @@ export default NextAuth({
             email: credentials.email
           }
         });
-        if(!user || !user.hasedPassword) {
+        if(!user || !user.hashedPassword) {
           throw new Error('Email does not exist');
         }
         const isCorrectPassword = await compare(
           credentials.password,
-          user.hasedPassword
+          user.hashedPassword
         )
         if(!isCorrectPassword) {
           throw new Error('Incorrect password');
@@ -45,6 +55,7 @@ export default NextAuth({
     signIn: '/auth',
   },
   debug: process.env.NODE_ENV === 'development',
+  adapter: PrismaAdapter(prismadb),
   session: {
     strategy: 'jwt',
   },
