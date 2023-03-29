@@ -15,7 +15,7 @@ model User {
   name String
   image String?
   email String? @unique
-  emailVerify DateTime?
+  emailVerified DateTime?
   hashedPassword String?
   password String?
   createdAt DateTime @default(now())
@@ -33,7 +33,7 @@ model Account {
   providerAccountId String
   refresh_token String? @db.String
   access_token String? @db.String
-  exprire_at Int?
+  expires_at Int?
   token_type String?
   scope String?
   id_token String? @db.String
