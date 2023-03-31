@@ -54,9 +54,7 @@ export default async function handler(
           email: currentUser.email || "",
         },
         data: {
-          favoriteIds: {
-            push: updatedFavoriteIds,
-          },
+          favoriteIds: updatedFavoriteIds,
         },
       });
       return res.status(200).json(updatedUser);

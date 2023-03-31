@@ -1,11 +1,13 @@
 import React from "react";
 import { BsFillPlayFill } from "react-icons/bs";
+import { useRouter } from "next/router";
 import FavoriteButton from "./FavoriteButton";
 interface MovieCardProps {
   data: Record<string, any>;
   key: string;
 }
-const MovieCard: React.FC<MovieCardProps> = ({ data, key }) => {
+const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
+  const router = useRouter();
   return (
     <div className="group bg-zinc-900 col-span relative h-[12vw]">
       <img
@@ -78,8 +80,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ data, key }) => {
           >
             <div
               onClick={() => {
-                {
-                }
+                router.push(`/watch/${data?.id}`);
               }}
               className="
               cursor-pointer
@@ -98,7 +99,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ data, key }) => {
             >
               <BsFillPlayFill size={30} />
             </div>
-            <FavoriteButton movieId={data?.id}/>
+            <FavoriteButton movieId={data?.id} />
           </div>
           <p className="text-green-400 font-semibold mt-4">
             New <span className="text-white"> 2023 </span>
