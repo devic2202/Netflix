@@ -15,7 +15,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ visible, onClose }) => {
   const [isVisible, setIsVisible] = useState(!!visible);
 
   const { movieId } = useInfoModal();
-  const { data = {} } = useMovie(movieId);
+  const { data = {} } = useMovie(movieId ?? '');
 
   useEffect(() => {
     setIsVisible(!!visible);
