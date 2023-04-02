@@ -4,11 +4,13 @@ import axios from "axios";
 import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
+import { useRouter } from "next/router";
 const Auth = () => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-
+  const [errorMessage, setErrorMessage] = useState("");
   const [variant, setVariant] = useState("login");
 
   const toggleVariant = useCallback(() => {
@@ -26,14 +28,18 @@ const Auth = () => {
       console.log(error);
     }
   }, [email, name, password]);
-
   const login = useCallback(async () => {
     try {
-      await signIn("credentials", {
+      const res = await signIn("credentials", {
         email,
         password,
-        callbackUrl: "/profiles",
+        redirect: false,
       });
+      if (res?.status === 200) {
+        router.push("/profiles");
+      } else {
+        setErrorMessage(res?.error ?? "");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -48,6 +54,11 @@ const Auth = () => {
               <h2 className="text-white text-4xl mb-8 font-semibold">
                 {variant === "login" ? "Sign in" : "Register"}
               </h2>
+              {errorMessage && (
+                <div className="text-white bg-orange-400 p-5 my-5">
+                  {errorMessage}
+                </div>
+              )}
               <div className="flex flex-col gap-4">
                 {variant === "register" && (
                   <Input
