@@ -12,7 +12,10 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
   const router = useRouter();
   const { openModal } = useInfoModal();
   return (
-    <div className="group bg-zinc-900 col-span relative h-[12vw]">
+    <div
+      className="group bg-zinc-900 col-span relative h-[12vw]"
+      style={{ flex: "0 0 17.666667%", marginRight: 20 }}
+    >
       <img
         className="
         cursor-pointer
@@ -43,10 +46,11 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
         delay-300
         w-full
         scale-0
-        group-hover:scale-110
+        group-hover:scale-125
         group-hover: -translate-y-[6vw]
-        group-hover: traslate-x-[2vw]
+        group-hover:traslate-x-[2vw]
         group-hover:opacity-100
+        group-hover:origin-center
       "
       >
         <img
