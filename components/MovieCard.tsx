@@ -13,8 +13,8 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
   const { openModal } = useInfoModal();
   return (
     <div
-      className="group bg-zinc-900 col-span relative h-[12vw]"
-      style={{ flex: "0 0 17.666667%", marginRight: 20 }}
+      className="group bg-zinc-900 col-span relative h-[9vw]"
+      style={{ flex: "0 0 16.66666667%", marginRight: 5 }}
     >
       <img
         className="
@@ -28,7 +28,8 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
         sm:group-hover:opacity-0
         delay-300
         w-full
-        h-[12vw]
+        h-[9vw]
+        z-10
       "
         src={data?.thumbnailUrl}
         alt="thumbnailUrl"

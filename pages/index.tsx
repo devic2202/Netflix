@@ -31,8 +31,8 @@ export default function Home() {
       <InfoModal visible={isOpen} onClose={closeModal}/>
       <Navbar />
       <Billboard />
-      <MovieList title="Trending Now" data={movies}/>
-      <MovieList title="My List" data={favorites}/>
+      <MovieList title="Trending Now" data={movies} movieKey='trending'/>
+      <MovieList title="My List" data={favorites} movieKey='myList'/>
     </>
   );
 }
