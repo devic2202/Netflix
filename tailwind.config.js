@@ -7,7 +7,10 @@ module.exports = {
   ],
   theme: {
     extend: {
-      transformOrigin: "center"
+      transformOrigin: "center",
+      colors: {
+        'hsla': 'hsla(0, 0%, 8%, .7)',
+      },
     },
   },
   plugins: [],

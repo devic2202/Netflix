@@ -19,7 +19,6 @@ const MovieList: React.FC<MovieListProps> = ({ data, title, movieKey }) => {
   const handleClickSlider = useCallback(
     (key: string) => {
       setClickSlider(false);
-      // if(key === 'next' && data?,.)
       if (typeof document !== "undefined") {
         const slider = document.querySelector(`.${movieKey}`) as SliderElement;
         slider.sliderContainer = slider.querySelector(
@@ -58,8 +57,9 @@ const MovieList: React.FC<MovieListProps> = ({ data, title, movieKey }) => {
             setClickSlider(true);
             handleClickSlider("pre");
           }}
-          style={{ background: "hsla(0, 0%, 8%, .7)" }}
-          className="flex items-center justify-center"
+          className={`flex items-center justify-center ${
+            hoverTrigger ? " bg-hsla" : ""
+          }`}
         >
           <BsChevronCompactLeft
             size={45}
@@ -89,9 +89,8 @@ const MovieList: React.FC<MovieListProps> = ({ data, title, movieKey }) => {
             setClickSlider(true);
             handleClickSlider("next");
           }}
-          style={{ background: "hsla(0, 0%, 8%, .7)" }}
           className={`${
-            hoverTrigger ? "z-20" : "text-zinc-900"
+            hoverTrigger ? "z-20 bg-hsla" : "text-zinc-900"
           } flex items-center justify-center `}
         >
           <BsChevronCompactRight
