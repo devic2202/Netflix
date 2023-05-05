@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-import serverAuth from "@/lib/serverAuth";
+import serverAuth from "@/libs/serverAuth";
 
 export default async (req :NextApiRequest, res: NextApiResponse) => {
   

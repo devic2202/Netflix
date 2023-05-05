@@ -1,66 +1,67 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import NextAuth , { AuthOptions } from "next-auth";
-import GithubProvider from "next-auth/providers/github";
-import GoogleProvider from "next-auth/providers/google";
-import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcrypt";
-
-import prismadb from "@/lib/prismadb";
+import NextAuth, { AuthOptions } from 'next-auth';
+import GithubProvider from 'next-auth/providers/github';
+import GoogleProvider from 'next-auth/providers/google';
+import Credentials from 'next-auth/providers/credentials';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { compare } from 'bcrypt';
+import prismadb from '@/libs/prismadb';
 
 export const authOptions: AuthOptions = {
-  adapter: PrismaAdapter(prismadb),
   providers: [
     GithubProvider({
-      clientId: process.env.GITHUB_ID as string,
-      clientSecret: process.env.GITHUB_SECRET as string,
+      clientId: process.env.GITHUB_ID || '',
+      clientSecret: process.env.GITHUB_SECRET || '',
     }),
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     }),
-    CredentialsProvider({
-      name: "credentials",
+    Credentials({
+      id: 'credentials',
+      name: 'Credentials',
       credentials: {
-        email: { label: "email", type: "text" },
-        password: { label: "password", type: "password" },
+        email: {
+          label: 'Email',
+          type: 'text',
+        },
+        password: {
+          label: 'Password',
+          type: 'passord'
+        }
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Missing email or password !");
+          throw new Error('Email and password required');
         }
 
-        const user = await prismadb.user.findUnique({
-          where: {
-            email: credentials.email,
-          },
-        });
-        if (!user || !user?.hashedPassword) {
-          throw new Error("username or password wrong !");
+        const user = await prismadb.user.findUnique({ where: {
+          email: credentials.email
+        }});
+
+        if (!user || !user.hashedPassword) {
+          throw new Error('Email does not exist');
         }
 
-        const isCorrectPassword = await bcrypt.compare(
-          credentials.password,
-          user.hashedPassword
-        );
+        const isCorrectPassword = await compare(credentials.password, user.hashedPassword);
 
-        if(!isCorrectPassword) {
-          throw new Error("Incorrect password !");
+        if (!isCorrectPassword) {
+          throw new Error('Incorrect password');
         }
+
         return user;
-      },
-    }),
+      }
+    })
   ],
   pages: {
-    signIn: '/',
+    signIn: '/auth'
   },
   debug: process.env.NODE_ENV === 'development',
-  session: {
-    strategy: 'jwt',
-  },
+  adapter: PrismaAdapter(prismadb),
+  session: { strategy: 'jwt' },
   jwt: {
-    secret: process.env.NEXTAUTH_JWT_SECRET
+    secret: process.env.NEXTAUTH_JWT_SECRET,
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET
 };
 
-export default NextAuth(authOptions)
+export default NextAuth(authOptions);
