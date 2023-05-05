@@ -5,6 +5,7 @@ interface InputProps {
   value: string;
   label: string;
   type: string;
+  onKeyDown?: (e: any) => void
 }
 
 const Input: React.FC<InputProps> = ({
@@ -13,6 +14,7 @@ const Input: React.FC<InputProps> = ({
   onChange,
   label,
   type,
+  onKeyDown,
 }) => {
   return (
     <div className="relative">
@@ -20,6 +22,7 @@ const Input: React.FC<InputProps> = ({
         value={value}
         type={type}
         onChange={onChange}
+        onKeyDown={onKeyDown}
         id={id}
         className="
         block

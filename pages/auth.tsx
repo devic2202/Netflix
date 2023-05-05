@@ -96,6 +96,11 @@ const Auth = () => {
                 label="Email address or phone number"
                 value={email}
                 onChange={(e: any) => setEmail(e.target.value)}
+                onKeyDown={(e: any) => {
+                  if ((e.key === 'Enter' || e.key === "NumpadEnter") && email && password) {
+                    variant === "login" ? login() : register()
+                  }
+                }}
               />
               <Input
                 type="password"
@@ -103,6 +108,11 @@ const Auth = () => {
                 label="Password"
                 value={password}
                 onChange={(e: any) => setPassword(e.target.value)}
+                onKeyDown={(e: any) => {
+                  if ((e.key === 'Enter' || e.key === "NumpadEnter") && email && password) {
+                    variant === "login" ? login() : register()
+                  }
+                }}
               />
             </div>
             <button
