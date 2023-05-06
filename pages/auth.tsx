@@ -31,7 +31,7 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-
+  const [errorMessage, setErrorMessage] = useState("");
   const [variant, setVariant] = useState("login");
 
   const toggleVariant = useCallback(() => {
@@ -42,14 +42,17 @@ const Auth = () => {
 
   const login = useCallback(async () => {
     try {
-      await signIn("credentials", {
+      const res = await signIn("credentials", {
         email,
         password,
         redirect: false,
         callbackUrl: "/",
       });
-
-      router.push("/profiles");
+      if (res?.status === 200) {
+        router.push("/profiles");
+      } else {
+        setErrorMessage(res?.error ?? "");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -80,6 +83,11 @@ const Auth = () => {
             <h2 className="text-white text-4xl mb-8 font-semibold">
               {variant === "login" ? "Sign in" : "Register"}
             </h2>
+            {errorMessage && (
+              <div className="text-white bg-orange-400 p-5 my-5">
+                {errorMessage}
+              </div>
+            )}
             <div className="flex flex-col gap-4">
               {variant === "register" && (
                 <Input
@@ -97,8 +105,12 @@ const Auth = () => {
                 value={email}
                 onChange={(e: any) => setEmail(e.target.value)}
                 onKeyDown={(e: any) => {
-                  if ((e.key === 'Enter' || e.key === "NumpadEnter") && email && password) {
-                    variant === "login" ? login() : register()
+                  if (
+                    (e.key === "Enter" || e.key === "NumpadEnter") &&
+                    email &&
+                    password
+                  ) {
+                    variant === "login" ? login() : register();
                   }
                 }}
               />
@@ -109,8 +121,12 @@ const Auth = () => {
                 value={password}
                 onChange={(e: any) => setPassword(e.target.value)}
                 onKeyDown={(e: any) => {
-                  if ((e.key === 'Enter' || e.key === "NumpadEnter") && email && password) {
-                    variant === "login" ? login() : register()
+                  if (
+                    (e.key === "Enter" || e.key === "NumpadEnter") &&
+                    email &&
+                    password
+                  ) {
+                    variant === "login" ? login() : register();
                   }
                 }}
               />
